@@ -16,9 +16,7 @@
 
 #define BUTTON_PIN                    13           //BUTTON pin
 
-const byte SCREENS                  = 3;           //how much screens
-
-boolean MODE                        = 0;           //CURRENT or MIN_MAX mode
+boolean MODE                        = 0;           //MODE 0 or 1
 byte SCREEN_NUMBER                  = 0;           //current SCREEN
 byte SCREENS_IN_MODE_0              = 4;           //number of SCREENS in MODE 0
 byte SCREENS_IN_MODE_1              = 3;           //number of SCREENS in MODE 1
@@ -136,8 +134,8 @@ void CHECK_BUTTON()
   boolean changed = debouncer.update();
   if (changed)
   {
-    int value = !debouncer.read();                   //наоборот т.к. INPUT_PULLUP
-    if (value == 1 && BUTTON_FLAG == 0)              //кнопка нажата
+    int value = !debouncer.read();                   //vice versa (INPUT_PULLUP)
+    if (value == 1 && BUTTON_FLAG == 0)              //button was pressed
     {
       BUTTON_FLAG = 1;
       BUTTON_PRESS_START = millis();
@@ -149,8 +147,9 @@ void CHECK_BUTTON()
       SCREEN_NUMBER++;
       if ((MODE == 0) && (SCREEN_NUMBER > SCREENS_IN_MODE_0 - 1)) SCREEN_NUMBER = 0;
       if ((MODE == 1) && (SCREEN_NUMBER > SCREENS_IN_MODE_1 - 1)) SCREEN_NUMBER = 0;
-      //      if (SCREEN_NUMBER > SCREENS - 1) SCREEN_NUMBER = 0;
+
       SHOW();
+
       Serial.print("Quick press. MODE: ");
       Serial.print(MODE);
       Serial.print("  SCREEN_NUMBER: ");
